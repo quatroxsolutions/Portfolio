@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quatrox Solutions — Publishing Production Partner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#05060b;
+    --panel:#0b0d17;
+    --panel-2:#10121f;
+    --blue:#3b82f6;
+    --violet:#7c5cff;
+    --gold:#d9b26a;
+    --text:#eef0f7;
+    --muted:#9aa0b8;
+    --line: rgba(255,255,255,0.09);
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--gold); color:#05060b; }
+
+  a{color:inherit;}
+
+  /* ---------- SPINE (signature element) ---------- */
+  .spine{
+    position:fixed; left:0; top:0; bottom:0; width:64px;
+    background:linear-gradient(180deg, #08090f 0%, #0a0b12 100%);
+    border-right:1px solid var(--line);
+    display:flex; flex-direction:column; align-items:center;
+    z-index:100; padding:28px 0;
+  }
+  .spine::before{
+    content:''; position:absolute; left:22px; top:0; bottom:0; width:1px;
+    background:repeating-linear-gradient(180deg, var(--gold) 0 6px, transparent 6px 14px);
+    opacity:.55;
+  }
+  .spine-mark{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--panel-2); border:1px solid var(--line);
+    margin:9px 0; cursor:pointer; transition:.3s;
+    position:relative; z-index:2;
+  }
+  .spine-mark.active{ background:var(--gold); box-shadow:0 0 10px var(--gold); }
+  .spine-label{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:var(--mono); font-size:10px; letter-spacing:.22em;
+    color:var(--muted); text-transform:uppercase; margin-bottom:24px;
+  }
+  .spine-foot{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:var(--mono); font-size:9px; letter-spacing:.18em;
+    color:#565c78; margin-top:auto;
+  }
+
+  main{ margin-left:64px; }
+  @media (max-width:720px){
+    .spine{ width:0; display:none; }
+    main{ margin-left:0; }
+  }
+
+  section{
+    padding:110px 8vw 100px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  section:nth-of-type(odd){ background:var(--panel); }
+  section:nth-of-type(even){ background:var(--ink); }
+
+  .chapter-tag{
+    font-family:var(--mono); font-size:12px; letter-spacing:.24em;
+    color:var(--gold); text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .chapter-tag::before{ content:''; width:26px; height:1px; background:var(--gold); }
+
+  h1,h2,h3{ font-family:var(--serif); font-weight:600; letter-spacing:-0.01em; }
+  h2{ font-size:clamp(28px,4vw,44px); margin-bottom:22px; max-width:720px; }
+  .lede{ font-size:17px; color:var(--muted); max-width:620px; margin-bottom:44px; }
+
+  /* ---------- HERO / COVER ---------- */
+  .cover{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding:8vw; border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(1100px 500px at 85% -10%, rgba(124,92,255,.25), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(59,130,246,.20), transparent 55%),
+      var(--ink);
+  }
+  .cover .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.3em; color:var(--blue);
+    text-transform:uppercase; margin-bottom:26px;
+  }
+  .cover h1{
+    font-size:clamp(46px,9vw,108px); line-height:.98;
+    background:linear-gradient(100deg, #ffffff 10%, #b9c3ff 55%, var(--violet) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:26px;
+  }
+  .cover h1 em{ font-style:italic; font-weight:300; color:var(--gold); background:none; -webkit-text-fill-color:var(--gold); }
+  .cover .sub{ font-size:19px; color:var(--muted); max-width:560px; margin-bottom:46px; }
+  .cover .meta{
+    display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--line); padding-top:24px; max-width:760px;
+  }
+  .cover .meta div{
+    flex:1 1 140px; padding-right:24px;
+  }
+  .cover .meta .n{ font-family:var(--serif); font-size:26px; color:var(--text); }
+  .cover .meta .l{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; margin-top:4px; }
+  .cta-row{ display:flex; gap:16px; margin-top:40px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--sans); font-weight:600; font-size:14px; padding:14px 26px;
+    border-radius:2px; text-decoration:none; display:inline-block; letter-spacing:.02em;
+    transition:.25s;
+  }
+  .btn-primary{ background:linear-gradient(100deg, var(--blue), var(--violet)); color:#fff; }
+  .btn-primary:hover{ filter:brightness(1.12); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:60px; }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } }
+  .quote-block{
+    border-left:2px solid var(--gold); padding-left:24px; margin-top:30px;
+    font-family:var(--serif); font-style:italic; font-size:20px; color:#dfe2f0; max-width:480px;
+  }
+  .stat-card{
+    background:var(--panel-2); border:1px solid var(--line); padding:26px; margin-bottom:14px;
+  }
+  .stat-card .n{ font-family:var(--serif); font-size:30px; color:var(--gold); }
+  .stat-card .l{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; margin-top:4px;}
+
+  /* ---------- SERVICES GRID ---------- */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:10px; }
+  .card{
+    background:var(--panel); padding:30px 26px; transition:.25s;
+  }
+  section:nth-of-type(even) .card{ background:var(--ink); }
+  .card:hover{ background:var(--panel-2); }
+  .card .idx{ font-family:var(--mono); font-size:11px; color:var(--gold); letter-spacing:.1em; }
+  .card h3{ font-size:18px; margin:10px 0 8px; font-weight:500; }
+  .card p{ font-size:13.5px; color:var(--muted); }
+
+  /* ---------- TWO COLUMN LISTS (EPUB / XML) ---------- */
+  .split{ display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:10px; }
+  @media (max-width:720px){ .split{ grid-template-columns:1fr; } }
+  .split-col h3{ font-size:16px; font-family:var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--blue); margin-bottom:18px; font-weight:500;}
+  .taglist{ display:flex; flex-wrap:wrap; gap:9px; }
+  .tag{
+    border:1px solid var(--line); padding:8px 14px; font-size:13px; color:var(--text);
+    font-family:var(--sans);
+  }
+
+  /* ---------- SUBTITLE / REGIONAL (signature spotlight) ---------- */
+  .spotlight{
+    background:linear-gradient(120deg, rgba(59,130,246,.10), rgba(124,92,255,.10));
+    border:1px solid rgba(217,178,106,.35);
+    padding:50px 44px; margin-top:10px; position:relative; overflow:hidden;
+  }
+  .spotlight::after{
+    content:'அ / മ'; position:absolute; right:30px; top:20px; font-family:var(--serif);
+    font-size:80px; color:rgba(255,255,255,.05); font-weight:300; pointer-events:none;
+  }
+  .spotlight-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:26px; margin-top:30px; }
+  .spot-item{ display:flex; gap:14px; align-items:flex-start; }
+  .spot-check{
+    width:22px; height:22px; border:1px solid var(--gold); flex:none; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:12px; margin-top:2px;
+  }
+  .spot-item h4{ font-size:15px; font-weight:600; margin-bottom:4px; }
+  .spot-item p{ font-size:13px; color:var(--muted); }
+
+  /* ---------- WORKFLOW ---------- */
+  .flow{ display:flex; flex-wrap:wrap; gap:0; margin-top:20px; counter-reset:step; }
+  .flow-step{
+    flex:1 1 150px; border:1px solid var(--line); padding:22px 18px; position:relative; background:var(--panel-2);
+    margin:-1px 0 0 -1px;
+  }
+  .flow-step .num{ font-family:var(--mono); font-size:11px; color:var(--gold); }
+  .flow-step .t{ font-size:14px; margin-top:8px; }
+
+  /* ---------- QA / capacity numbers ---------- */
+  .num-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:30px; }
+  .num-box{ background:var(--panel); padding:30px 24px; }
+  section:nth-of-type(even) .num-box{ background:var(--ink); }
+  .num-box .n{ font-family:var(--serif); font-size:38px; color:var(--gold); line-height:1; }
+  .num-box .l{ font-family:var(--mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-top:10px; }
+
+  .pill-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+  .pill{ border:1px solid var(--line); padding:9px 16px; font-size:13px; border-radius:20px; color:var(--muted); }
+
+  /* ---------- CLIENTS ---------- */
+  .client-row{ display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--line); margin-top:20px; }
+  .client-row span{
+    font-family:var(--serif); font-style:italic; font-size:20px; color:#c7cbe0;
+    padding:22px 34px 22px 0; border-bottom:1px solid var(--line);
+  }
+
+  /* ---------- CONTACT / COLOPHON ---------- */
+  .colophon{ text-align:left; }
+  .colophon-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:20px; }
+  @media (max-width:720px){ .colophon-grid{ grid-template-columns:1fr; } }
+  .contact-line{ display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); font-size:15px;}
+  .contact-line .k{ font-family:var(--mono); font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:.1em; width:90px; flex:none; padding-top:3px;}
+  footer{
+    padding:40px 8vw; font-family:var(--mono); font-size:11px; color:#565c78;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    border-top:1px solid var(--line);
+  }
+
+  /* ---------- SCROLL ANIMATION SYSTEM ---------- */
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{
+      opacity:0;
+      transform:translateY(26px);
+      transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+      transition-delay:calc(var(--i, 0) * 70ms);
+    }
+    .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+    .reveal-scale{ opacity:0; transform:scale(.92); transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1); transition-delay:calc(var(--i,0) * 60ms); }
+    .reveal-scale.in-view{ opacity:1; transform:scale(1); }
+
+    .reveal-left{ opacity:0; transform:translateX(-30px); transition:opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+    .reveal-left.in-view{ opacity:1; transform:translateX(0); }
+  }
+
+  /* Hero load-in sequence */
+  .cover .eyebrow, .cover h1, .cover .sub, .cover .cta-row, .cover .meta{
+    opacity:0; transform:translateY(22px);
+    animation:heroIn .9s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .cover .eyebrow{ animation-delay:.05s; }
+  .cover h1{ animation-delay:.18s; }
+  .cover .sub{ animation-delay:.34s; }
+  .cover .cta-row{ animation-delay:.48s; }
+  .cover .meta{ animation-delay:.6s; }
+  @keyframes heroIn{ to{ opacity:1; transform:translateY(0); } }
+
+  /* Drifting gradient blobs behind the cover */
+  .cover{ overflow:hidden; }
+  .cover::before{
+    content:''; position:absolute; inset:-20%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(560px 420px at 78% 18%, rgba(124,92,255,.30), transparent 60%),
+      radial-gradient(520px 460px at 8% 92%, rgba(59,130,246,.24), transparent 60%);
+    animation:driftBlob 16s ease-in-out infinite alternate;
+  }
+  .cover > *{ position:relative; z-index:1; }
+  @keyframes driftBlob{
+    0%{ transform:translate(0,0) scale(1); }
+    100%{ transform:translate(-3%, 3%) scale(1.08); }
+  }
+
+  /* Card / grid hover lift */
+  .card, .stat-card, .num-box, .flow-step, .tag, .pill{
+    transition:transform .35s cubic-bezier(.16,1,.3,1), background .25s, border-color .25s;
+  }
+  .card:hover, .stat-card:hover, .num-box:hover{ transform:translateY(-5px); }
+  .flow-step:hover{ transform:translateY(-4px); border-color:var(--gold); }
+  .tag:hover, .pill:hover{ transform:translateY(-2px); border-color:var(--gold); color:var(--text); }
+
+  /* Spine scroll progress */
+  .spine-progress{
+    position:absolute; left:22px; top:0; width:1px; height:0%;
+    background:linear-gradient(180deg, var(--blue), var(--violet));
+    box-shadow:0 0 8px rgba(124,92,255,.7);
+    z-index:1; transition:height .1s linear;
+  }
+
+  /* Chapter tag draws in */
+  .chapter-tag::before{ transform-origin:left; }
+  .reveal .chapter-tag::before{ animation:none; }
+
+  /* Number count-up ready state (JS toggles .counted) */
+  .num-box .n, .stat-card .n, .cover .meta .n{ font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+
+<nav class="spine">
+  <div class="spine-progress" id="spineProgress"></div>
+  <div class="spine-label">Quatrox Solutions</div>
+  <div class="spine-mark active" data-target="cover"></div>
+  <div class="spine-mark" data-target="about"></div>
+  <div class="spine-mark" data-target="services"></div>
+  <div class="spine-mark" data-target="expertise"></div>
+  <div class="spine-mark" data-target="access"></div>
+  <div class="spine-mark" data-target="regional"></div>
+  <div class="spine-mark" data-target="quality"></div>
+  <div class="spine-mark" data-target="capacity"></div>
+  <div class="spine-mark" data-target="clients"></div>
+  <div class="spine-mark" data-target="contact"></div>
+  <div class="spine-foot">EST. 2025</div>
+</nav>
+
+<main>
+
+  <!-- COVER -->
+  <section class="cover" id="cover">
+    <div class="eyebrow">Publishing · Accessibility · Digital Transformation</div>
+    <h1>Quatrox<br><em>Solutions</em></h1>
+    <p class="sub">Your trusted publishing production partner — from manuscript to market-ready EPUB, structured XML, accessible formats, and regional-language subtitles for screen content.</p>
+    <div class="cta-row">
+      <a href="#contact" class="btn btn-primary">Start a Project</a>
+      <a href="#services" class="btn btn-ghost">See What We Do</a>
+    </div>
+    <div class="meta">
+      <div><div class="n">2025</div><div class="l">Founded</div></div>
+      <div><div class="n">25</div><div class="l">Professionals</div></div>
+      <div><div class="n">300–600</div><div class="l">Files / Day</div></div>
+      <div><div class="n">Tamil Nadu</div><div class="l">India, HQ</div></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="chapter-tag">Chapter 01 — About Us</div>
+    <h2>An emerging production house built around one discipline: getting content right.</h2>
+    <div class="about-grid">
+      <div>
+        <p class="lede">Quatrox Solutions Private Limited is a publishing services company headquartered in Tamil Nadu, India, delivering high-quality digital publishing solutions to publishers and content providers across the globe. Our team specialises in EPUB production, XML conversion, accessibility remediation, quality assurance, and digital content transformation — with exceptional accuracy and turnaround time.</p>
+        <div class="quote-block">To become one of the world's most trusted publishing service partners by delivering innovative, scalable, and high-quality digital publishing solutions.</div>
+      </div>
+      <div>
+        <div class="stat-card"><div class="n">25</div><div class="l">Publishing Professionals</div></div>
+        <div class="stat-card"><div class="n">99%</div><div class="l">Quality Accuracy</div></div>
+        <div class="stat-card"><div class="n">Global</div><div class="l">Client Base &amp; Standards</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="chapter-tag">Chapter 02 — What We Do</div>
+    <h2>Every stage of the production line, under one roof.</h2>
+    <p class="lede">A full-service bench so publishers can hand off one file — or an entire list — and get back something ready to ship.</p>
+    <div class="grid">
+      <div class="card"><div class="idx">01</div><h3>EPUB Conversion</h3><p>Reflowable &amp; fixed-layout builds for every major storefront.</p></div>
+      <div class="card"><div class="idx">02</div><h3>EPUB Accessibility</h3><p>Remediation to meet global accessibility standards.</p></div>
+      <div class="card"><div class="idx">03</div><h3>XML Conversion</h3><p>JATS, book &amp; journal XML with clean structure.</p></div>
+      <div class="card"><div class="idx">04</div><h3>Typesetting</h3><p>Precise, print-ready and digital-ready layout.</p></div>
+      <div class="card"><div class="idx">05</div><h3>Fixed Layout</h3><p>Pixel-accurate builds for illustrated &amp; complex titles.</p></div>
+      <div class="card"><div class="idx">06</div><h3>Read Aloud</h3><p>Synchronised narration for accessible reading.</p></div>
+      <div class="card"><div class="idx">07</div><h3>Proofreading</h3><p>Multi-pass editorial review for accuracy.</p></div>
+      <div class="card"><div class="idx">08</div><h3>PDF Remediation</h3><p>PDF/UA-compliant, screen-reader-friendly files.</p></div>
+      <div class="card"><div class="idx">09</div><h3>HTML Conversion</h3><p>Web-ready content from source manuscripts.</p></div>
+      <div class="card"><div class="idx">10</div><h3>Data Entry</h3><p>Structured, accurate data capture at scale.</p></div>
+      <div class="card"><div class="idx">11</div><h3>Medical Billing</h3><p>Dedicated support for healthcare documentation.</p></div>
+    </div>
+  </section>
+
+  <!-- EPUB / XML EXPERTISE -->
+  <section id="expertise">
+    <div class="chapter-tag">Chapter 03 — Format Expertise</div>
+    <h2>Fluent in the formats publishing actually runs on.</h2>
+    <div class="split">
+      <div class="split-col">
+        <h3>EPUB</h3>
+        <div class="taglist">
+          <span class="tag">EPUB 2</span><span class="tag">EPUB 3</span><span class="tag">Fixed Layout</span>
+          <span class="tag">Reflowable EPUB</span><span class="tag">Accessible EPUB</span>
+          <span class="tag">Kindle Ready</span><span class="tag">Apple Books</span>
+          <span class="tag">Google Play Books</span><span class="tag">Kobo</span><span class="tag">ACE Validation</span>
+        </div>
+      </div>
+      <div class="split-col">
+        <h3>XML</h3>
+        <div class="taglist">
+          <span class="tag">JATS XML</span><span class="tag">Book XML</span><span class="tag">Journal XML</span>
+          <span class="tag">DTD Validation</span><span class="tag">Cross Reference</span>
+          <span class="tag">Metadata</span><span class="tag">Index Linking</span><span class="tag">Reference Linking</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESSIBILITY -->
+  <section id="access">
+    <div class="chapter-tag">Chapter 04 — Accessibility</div>
+    <h2>Content that works for every reader, on every device.</h2>
+    <div class="pill-row">
+      <span class="pill">WCAG</span><span class="pill">PDF/UA</span><span class="pill">EPUB Accessibility</span>
+      <span class="pill">Alt Text</span><span class="pill">MathML</span><span class="pill">Screen Reader Testing</span>
+      <span class="pill">Navigation</span><span class="pill">ARIA Labels</span>
+    </div>
+  </section>
+
+  <!-- REGIONAL / SUBTITLES — signature spotlight -->
+  <section id="regional">
+    <div class="chapter-tag">Chapter 05 — Regional Language &amp; Screen Content</div>
+    <h2>From the page to the screen — in the languages your audience reads.</h2>
+    <p class="lede">We extend our publishing-grade accuracy to creators and production houses, helping stories reach regional audiences with subtitles built to the same editorial standard as our books.</p>
+    <div class="spotlight">
+      <div class="spotlight-grid">
+        <div class="spot-item"><div class="spot-check">✓</div><div><h4>Tamil Subtitle Services</h4><p>Accurate, culturally attuned subtitling for Tamil audiences.</p></div></div>
+        <div class="spot-item"><div class="spot-check">✓</div><div><h4>Malayalam Subtitle Services</h4><p>Precise translation and timing for Malayalam content.</p></div></div>
+        <div class="spot-item"><div class="spot-check">✓</div><div><h4>YouTube Channel Support</h4><p>Ongoing subtitle support for creators and channels.</p></div></div>
+        <div class="spot-item"><div class="spot-check">✓</div><div><h4>Web Series &amp; OTT Solutions</h4><p>Episodic subtitle workflows built for production schedules.</p></div></div>
+        <div class="spot-item"><div class="spot-check">✓</div><div><h4>Translation &amp; QA</h4><p>Every file passes a dedicated linguistic and technical review.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section id="workflow">
+    <div class="chapter-tag">Chapter 06 — How a File Moves Through Us</div>
+    <h2>End-to-end publishing workflow.</h2>
+    <div class="flow">
+      <div class="flow-step"><div class="num">01</div><div class="t">Publisher Files</div></div>
+      <div class="flow-step"><div class="num">02</div><div class="t">Content Assessment</div></div>
+      <div class="flow-step"><div class="num">03</div><div class="t">Pre-editing</div></div>
+      <div class="flow-step"><div class="num">04</div><div class="t">XML Structuring</div></div>
+      <div class="flow-step"><div class="num">05</div><div class="t">EPUB Production</div></div>
+      <div class="flow-step"><div class="num">06</div><div class="t">Accessibility Implementation</div></div>
+      <div class="flow-step"><div class="num">07</div><div class="t">Quality Assurance</div></div>
+      <div class="flow-step"><div class="num">08</div><div class="t">Validation → Delivery</div></div>
+    </div>
+  </section>
+
+  <!-- QUALITY -->
+  <section id="quality">
+    <div class="chapter-tag">Chapter 07 — Quality Assurance</div>
+    <h2>Nothing ships without a final read.</h2>
+    <div class="pill-row">
+      <span class="pill">Multiple QA Levels</span><span class="pill">Automated Validation</span>
+      <span class="pill">Manual Proofreading</span><span class="pill">Visual QA</span>
+      <span class="pill">Content QA</span><span class="pill">Accessibility QA</span>
+      <span class="pill">Version Control</span><span class="pill">Final Review</span>
+    </div>
+  </section>
+
+  <!-- CAPACITY / INDUSTRIES -->
+  <section id="capacity">
+    <div class="chapter-tag">Chapter 08 — Capacity &amp; Industries Served</div>
+    <h2>Built to scale with a list, not just a title.</h2>
+    <div class="num-row">
+      <div class="num-box"><div class="n">300–400</div><div class="l">Complex Files / Day</div></div>
+      <div class="num-box"><div class="n">400–600</div><div class="l">Medium Files / Day</div></div>
+      <div class="num-box"><div class="n">25</div><div class="l">Dedicated Team</div></div>
+      <div class="num-box"><div class="n">99%</div><div class="l">Quality Accuracy</div></div>
+    </div>
+    <p class="lede" style="margin-top:40px;">Serving Academic Publishing, STM, Education, Trade Publishing, Corporate Documentation, Healthcare, and Government.</p>
+    <div class="pill-row">
+      <span class="pill">Dedicated Resource</span><span class="pill">Fixed Cost</span>
+      <span class="pill">Project Based</span><span class="pill">Long-Term Partnership</span>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section id="clients">
+    <div class="chapter-tag">Chapter 09 — Trust &amp; Clients</div>
+    <h2>Secure by default. Trusted by partners.</h2>
+    <div class="pill-row">
+      <span class="pill">NDA Compliance</span><span class="pill">Secure File Transfer</span>
+      <span class="pill">Controlled Access</span><span class="pill">Confidential Data Handling</span>
+      <span class="pill">Client Data Protection</span>
+    </div>
+    <div class="client-row">
+      <span>Versatile Pre Media</span><span>XBP Asia IT Solutions</span><span>Deanta</span>
+      <span>Vsoft</span><span>Newgen Knowledgeworks</span><span>TNQ</span>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="colophon">
+    <div class="chapter-tag">Colophon — Contact Us</div>
+    <h2>Let's build the future of publishing, together.</h2>
+    <div class="colophon-grid">
+      <div>
+        <div class="contact-line"><div class="k">Company</div><div>Quatrox Solutions Private Limited</div></div>
+        <div class="contact-line"><div class="k">Address</div><div>16/75A HMP Towers, Market Road, Thuckalay, Vilavur, Kanniyakumari, Tamil Nadu – 629175</div></div>
+        <div class="contact-line"><div class="k">Phone</div><div>+91 7200801765</div></div>
+        <div class="contact-line"><div class="k">Email</div><div>contact@quatroxsolutions.com</div></div>
+        <div class="contact-line"><div class="k">Web</div><div>www.quatroxsolutions.com</div></div>
+      </div>
+      <div>
+        <a href="#cover" class="btn btn-primary" style="margin-top:14px;">Back to Cover ↑</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>© 2025 Quatrox Solutions Private Limited</span>
+  <span>Publishing · Accessibility · Digital Transformation</span>
+</footer>
+
+<script>
+  // ---- Spine chapter nav (active state) ----
+  const marks = document.querySelectorAll('.spine-mark');
+  const sections = Array.from(marks).map(m => document.getElementById(m.dataset.target)).filter(Boolean);
+  marks.forEach(m => m.addEventListener('click', () => {
+    const el = document.getElementById(m.dataset.target);
+    if(el) el.scrollIntoView({behavior:'smooth'});
+  }));
+  const navObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        marks.forEach(m => m.classList.toggle('active', m.dataset.target === e.target.id));
+      }
+    });
+  }, {rootMargin: '-40% 0px -55% 0px'});
+  sections.forEach(s => navObs.observe(s));
+
+  // ---- Spine scroll progress fill ----
+  const progressEl = document.getElementById('spineProgress');
+  function updateProgress(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    if(progressEl) progressEl.style.height = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // ---- Auto-apply reveal classes to content elements ----
+  const revealSelectors = [
+    '.chapter-tag', 'h2', '.lede', '.quote-block',
+    '.card', '.stat-card', '.split-col', '.spotlight', '.spot-item',
+    '.flow-step', '.num-box', '.pill-row', '.client-row',
+    '.contact-line', '.taglist', '.cta-row a'
+  ];
+  document.querySelectorAll(revealSelectors.join(',')).forEach((el, globalIdx) => {
+    el.classList.add('reveal');
+  });
+  // stagger within each parent group
+  document.querySelectorAll('.grid, .split, .spotlight-grid, .num-row, .colophon-grid').forEach(group => {
+    Array.from(group.children).forEach((child, i) => {
+      child.classList.add('reveal');
+      child.style.setProperty('--i', i);
+    });
+  });
+
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObs.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ---- Count-up animation for stat numbers ----
+  function animateCount(el){
+    const raw = el.textContent.trim();
+    const match = raw.match(/(\d[\d,]*)/);
+    if(!match) return;
+    const target = parseInt(match[1].replace(/,/g,''), 10);
+    const suffix = raw.slice(match.index + match[1].length);
+    const prefix = raw.slice(0, match.index);
+    const dur = 1100;
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(target * eased);
+      el.textContent = prefix + val.toLocaleString() + suffix;
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        animateCount(entry.target);
+        countObs.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.6});
+  document.querySelectorAll('.num-box .n, .stat-card .n, .cover .meta .n').forEach(el => {
+    if(/\d/.test(el.textContent)) countObs.observe(el);
+  });
+</script>
+
+</body>
+</html>
