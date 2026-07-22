@@ -102,7 +102,7 @@
     background:
       radial-gradient(1100px 500px at 85% -10%, rgba(124,92,255,.25), transparent 60%),
       radial-gradient(900px 500px at -10% 110%, rgba(59,130,246,.20), transparent 55%),
-      var(--ink);
+      linear-gradient(180deg, #090B12 0%, #0D1221 100%);
   }
   .cover .eyebrow{
     font-family:var(--mono); font-size:12px; letter-spacing:.3em; color:var(--blue);
@@ -149,7 +149,7 @@
   .stat-card .l{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; margin-top:4px;}
 
   /* ---------- SERVICES GRID ---------- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:10px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1px; background:var(--panel); border:1px solid var(--line); margin-top:10px; }
   .card{
     background:var(--panel); padding:30px 26px; transition:.25s;
   }
@@ -176,8 +176,7 @@
     padding:50px 44px; margin-top:10px; position:relative; overflow:hidden;
   }
   .spotlight::after{
-    content:'அ / മ'; position:absolute; right:30px; top:20px; font-family:var(--serif);
-    font-size:80px; color:rgba(255,255,255,.05); font-weight:300; pointer-events:none;
+    content:'';
   }
   .spotlight-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:26px; margin-top:30px; }
   .spot-item{ display:flex; gap:14px; align-items:flex-start; }
@@ -274,15 +273,16 @@
   .cover .book-3d-scene{
     position:absolute; inset:0; z-index:0; pointer-events:none;
     perspective:1800px;
+    opacity:.35;
   }
   .book-wrap{
     position:absolute; transform-style:preserve-3d;
   }
-  .book-wrap-a{ top:50%; right:4vw; margin-top:-145px; z-index:3; }
-  .book-wrap-b{ top:14%; right:17vw; margin-top:0; transform:scale(.6) rotate(-5deg); opacity:.55; z-index:2; }
-  .book-wrap-c{ top:auto; bottom:6%; right:-2vw; transform:scale(.44) rotate(7deg); opacity:.38; z-index:1; }
+  .book-wrap-a{ top:50%; right:12vw; margin-top:-170px; z-index:3; }
+  .book-wrap-b{ top:18%; right:24vw; margin-top:0; transform:scale(.75) rotate(-5deg); opacity:.65; z-index:2; }
+  .book-wrap-c{ top:auto; bottom:8%; right:8vw; transform:scale(.55) rotate(7deg); opacity:.5; z-index:1; }
   .book-3d{
-    position:relative; width:210px; height:290px;
+    position:relative; width:250px; height:345px;
     transform-style:preserve-3d;
     animation:bookLive 15s ease-in-out infinite;
     filter:drop-shadow(0 40px 50px rgba(36,28,16,.28));
@@ -292,17 +292,27 @@
   .book-3d .face{ position:absolute; backface-visibility:hidden; }
   .book-3d .front{
     width:210px; height:290px; transform:translateZ(17px);
-    background:linear-gradient(155deg, #3a2415 0%, #2E1B10 55%, #21120A 100%);
-    border:1px solid rgba(230,196,138,.3);
+    background:linear-gradient(155deg, rgba(59,130,246,.95) 0%, rgba(124,92,255,.92) 42%, rgba(17,24,39,.98) 100%);
+    border:1px solid rgba(124,92,255,.35);
     display:flex; align-items:center; justify-content:center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 12px 30px rgba(0,0,0,.25);
   }
   .book-3d .front::before{
     content:''; position:absolute; inset:14px;
-    border:1px solid rgba(230,196,138,.35);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:4px;
+  }
+  .book-3d .front::after{
+    content:''; position:absolute; right:18px; top:18px; bottom:18px;
+    width:10px; background:rgba(255,255,255,.08);
+    border-radius:999px;
+    opacity:.7;
+    transform:translateX(-2px);
   }
   .book-3d .front-mark{
     font-family:var(--serif); font-style:italic; font-weight:300; font-size:64px;
-    color:var(--gold); opacity:.9;
+    color:rgba(255,236,164,.95); opacity:.95;
+    text-shadow:0 2px 10px rgba(0,0,0,.2);
   }
   .book-3d .back{
     width:210px; height:290px; transform:rotateY(180deg) translateZ(17px);
@@ -322,7 +332,8 @@
   .book-3d .pages{
     width:34px; height:290px; right:0; top:0; transform-origin:right center; transform:rotateY(90deg);
     background:
-      repeating-linear-gradient(180deg, #F3EAD6 0 2px, #E4D6B4 2px 3px);
+      linear-gradient(90deg, #F1E6D4 0%, #E6D7BD 12%, #F2EAE0 24%, #E8D7B9 36%, #F0E7D3 100%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
     border-top:1px solid rgba(36,28,16,.2); border-bottom:1px solid rgba(36,28,16,.2);
   }
   .book-3d .top{
@@ -424,7 +435,7 @@
     <div class="book-3d-scene" aria-hidden="true">
       <div class="book-wrap book-wrap-b">
         <div class="book-3d">
-          <div class="face front"></div>
+          <div class="face front"><span class="front-mark">Q</span></div>
           <div class="face back"></div>
           <div class="face spine-face"></div>
           <div class="face pages"></div>
@@ -434,7 +445,7 @@
       </div>
       <div class="book-wrap book-wrap-c">
         <div class="book-3d">
-          <div class="face front"></div>
+          <div class="face front"><span class="front-mark">Q</span></div>
           <div class="face back"></div>
           <div class="face spine-face"></div>
           <div class="face pages"></div>
