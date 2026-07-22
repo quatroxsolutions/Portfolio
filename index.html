@@ -6,7 +6,7 @@
 <title>Quatrox Solutions — Publishing Production Partner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#05060b;
@@ -19,6 +19,7 @@
     --muted:#9aa0b8;
     --line: rgba(255,255,255,0.09);
     --serif: 'Fraunces', serif;
+    --serif-body: 'Lora', serif;
     --sans: 'Inter', sans-serif;
     --mono: 'IBM Plex Mono', monospace;
   }
@@ -27,13 +28,16 @@
   body{
     background:var(--ink);
     color:var(--text);
-    font-family:var(--sans);
-    line-height:1.6;
+    font-family:var(--serif-body);
+    line-height:1.65;
     -webkit-font-smoothing:antialiased;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M29 3C20 4 10 10 5 24l-2 5 5-2C21 22 28 12 30 4z' fill='%23d9b26a' stroke='%2305060b' stroke-width='1'/%3E%3Cpath d='M25 7l-4 4M21 11l-4 4M17 15l-4 4M13 19l-3 3' stroke='%2305060b' stroke-width='0.7' opacity='0.55'/%3E%3Ccircle cx='4' cy='27' r='1.6' fill='%237c5cff'/%3E%3C/svg%3E") 4 27, text;
   }
-  ::selection{ background:var(--gold); color:#05060b; }
+  ::selection{ background:var(--gold); color:var(--ink); }
 
-  a{color:inherit;}
+  a{ color:inherit; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Cpath d='M29 3C20 4 10 10 5 24l-2 5 5-2C21 22 28 12 30 4z' fill='%23d9b26a' stroke='%2305060b' stroke-width='1'/%3E%3Cpath d='M25 7l-4 4M21 11l-4 4M17 15l-4 4M13 19l-3 3' stroke='%2305060b' stroke-width='0.7' opacity='0.55'/%3E%3Ccircle cx='4' cy='27' r='2' fill='%237c5cff'/%3E%3Cpath d='M11 25l1.4-1.4M11 25l0.4-2M11 25l-2-0.4' stroke='%23d9b26a' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M31 8l1-1.4M31 8l-1.4-1M31 8l1.4 1' stroke='%23d9b26a' stroke-width='0.9' stroke-linecap='round'/%3E%3C/svg%3E") 4 27, pointer;
+  }
+  .card h3{ font-family:var(--sans); }
 
   /* ---------- SPINE (signature element) ---------- */
   .spine{
@@ -266,6 +270,81 @@
     100%{ transform:translate(-3%, 3%) scale(1.08); }
   }
 
+  /* ---------- 3D floating books (cover background, signature element) ---------- */
+  .cover .book-3d-scene{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    perspective:1800px;
+  }
+  .book-wrap{
+    position:absolute; transform-style:preserve-3d;
+  }
+  .book-wrap-a{ top:50%; right:4vw; margin-top:-145px; z-index:3; }
+  .book-wrap-b{ top:14%; right:17vw; margin-top:0; transform:scale(.6) rotate(-5deg); opacity:.55; z-index:2; }
+  .book-wrap-c{ top:auto; bottom:6%; right:-2vw; transform:scale(.44) rotate(7deg); opacity:.38; z-index:1; }
+  .book-3d{
+    position:relative; width:210px; height:290px;
+    transform-style:preserve-3d;
+    animation:bookLive 15s ease-in-out infinite;
+    filter:drop-shadow(0 40px 50px rgba(36,28,16,.28));
+  }
+  .book-wrap-b .book-3d{ animation-duration:19s; animation-delay:-6s; }
+  .book-wrap-c .book-3d{ animation-duration:12s; animation-delay:-3s; }
+  .book-3d .face{ position:absolute; backface-visibility:hidden; }
+  .book-3d .front{
+    width:210px; height:290px; transform:translateZ(17px);
+    background:linear-gradient(155deg, #3a2415 0%, #2E1B10 55%, #21120A 100%);
+    border:1px solid rgba(230,196,138,.3);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .book-3d .front::before{
+    content:''; position:absolute; inset:14px;
+    border:1px solid rgba(230,196,138,.35);
+  }
+  .book-3d .front-mark{
+    font-family:var(--serif); font-style:italic; font-weight:300; font-size:64px;
+    color:var(--gold); opacity:.9;
+  }
+  .book-3d .back{
+    width:210px; height:290px; transform:rotateY(180deg) translateZ(17px);
+    background:linear-gradient(155deg, #2E1B10 0%, #21120A 100%);
+    border:1px solid rgba(230,196,138,.22);
+  }
+  .book-3d .spine-face{
+    width:34px; height:290px; left:0; top:0; transform-origin:left center; transform:rotateY(-90deg);
+    background:linear-gradient(180deg, #24140B, #1a0e08);
+    border-top:1px solid rgba(230,196,138,.25); border-bottom:1px solid rgba(230,196,138,.25);
+  }
+  .book-3d .spine-face::before{
+    content:''; position:absolute; left:6px; right:6px; top:16px; bottom:16px;
+    background:repeating-linear-gradient(180deg, var(--gold) 0 4px, transparent 4px 12px);
+    opacity:.5;
+  }
+  .book-3d .pages{
+    width:34px; height:290px; right:0; top:0; transform-origin:right center; transform:rotateY(90deg);
+    background:
+      repeating-linear-gradient(180deg, #F3EAD6 0 2px, #E4D6B4 2px 3px);
+    border-top:1px solid rgba(36,28,16,.2); border-bottom:1px solid rgba(36,28,16,.2);
+  }
+  .book-3d .top{
+    width:210px; height:34px; top:0; left:0; transform-origin:top center; transform:rotateX(90deg);
+    background:linear-gradient(180deg, #E4D6B4, #d8c79c);
+  }
+  .book-3d .bottom{
+    width:210px; height:34px; bottom:0; left:0; transform-origin:bottom center; transform:rotateX(-90deg);
+    background:linear-gradient(0deg, #E4D6B4, #d8c79c);
+  }
+  @keyframes bookLive{
+    0%{ transform:rotateX(-8deg) rotateY(-36deg) translateY(0); }
+    25%{ transform:rotateX(-5deg) rotateY(-14deg) translateY(-16px); }
+    50%{ transform:rotateX(-10deg) rotateY(6deg) translateY(0); }
+    75%{ transform:rotateX(-5deg) rotateY(-14deg) translateY(-16px); }
+    100%{ transform:rotateX(-8deg) rotateY(-36deg) translateY(0); }
+  }
+  @media (max-width:960px){
+    .cover .book-3d-scene{ display:none; }
+  }
+
+
   /* Card / grid hover lift */
   .card, .stat-card, .num-box, .flow-step, .tag, .pill{
     transition:transform .35s cubic-bezier(.16,1,.3,1), background .25s, border-color .25s;
@@ -280,6 +359,36 @@
     background:linear-gradient(180deg, var(--blue), var(--violet));
     box-shadow:0 0 8px rgba(124,92,255,.7);
     z-index:1; transition:height .1s linear;
+  }
+
+  /* ---------- Ink-blot click flourish (quill signature) ---------- */
+  .ink-blot{
+    position:fixed; pointer-events:none; z-index:9999;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--violet);
+    transform:translate(-50%,-50%) scale(1);
+    opacity:.55;
+    animation:inkSpread .6s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes inkSpread{
+    0%{ transform:translate(-50%,-50%) scale(0.3); opacity:.6; }
+    100%{ transform:translate(-50%,-50%) scale(3.2); opacity:0; }
+  }
+
+  /* ---------- Sparkle trail (feather-quill signature) ---------- */
+  .sparkle{
+    position:fixed; pointer-events:none; z-index:9999;
+    color:var(--gold);
+    text-shadow:0 0 6px var(--gold), 0 0 12px rgba(217,178,106,.6);
+    transform:translate(-50%,-50%) scale(.3) rotate(0deg);
+    opacity:0;
+    animation:sparkleLife .95s ease-out forwards;
+    user-select:none;
+  }
+  @keyframes sparkleLife{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(.2) rotate(0deg); }
+    18%{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(25deg); }
+    100%{ opacity:0; transform:translate(-50%,-140%) scale(.5) rotate(60deg); }
   }
 
   /* Chapter tag draws in */
@@ -312,6 +421,39 @@
 
   <!-- COVER -->
   <section class="cover" id="cover">
+    <div class="book-3d-scene" aria-hidden="true">
+      <div class="book-wrap book-wrap-b">
+        <div class="book-3d">
+          <div class="face front"></div>
+          <div class="face back"></div>
+          <div class="face spine-face"></div>
+          <div class="face pages"></div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+      </div>
+      <div class="book-wrap book-wrap-c">
+        <div class="book-3d">
+          <div class="face front"></div>
+          <div class="face back"></div>
+          <div class="face spine-face"></div>
+          <div class="face pages"></div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+      </div>
+      <div class="book-wrap book-wrap-a">
+        <div class="book-3d">
+          <div class="face front"><span class="front-mark">Q</span></div>
+          <div class="face back"></div>
+          <div class="face spine-face"></div>
+          <div class="face pages"></div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="eyebrow">Publishing · Accessibility · Digital Transformation</div>
     <h1>Quatrox<br><em>Solutions</em></h1>
     <p class="sub">Your trusted publishing production partner — from manuscript to market-ready EPUB, structured XML, accessible formats, and regional-language subtitles for screen content.</p>
@@ -502,6 +644,40 @@
 </footer>
 
 <script>
+  // ---- Ink-blot flourish on click (quill signature) ----
+  document.addEventListener('click', (e) => {
+    const blot = document.createElement('div');
+    blot.className = 'ink-blot';
+    blot.style.left = e.clientX + 'px';
+    blot.style.top = e.clientY + 'px';
+    document.body.appendChild(blot);
+    blot.addEventListener('animationend', () => blot.remove());
+  });
+
+  // ---- Sparkle trail behind the quill cursor ----
+  const SPARKLE_GLYPHS = ['✦','✧','✳','·'];
+  let lastSparkleTime = 0;
+  let lastSparklePos = null;
+  document.addEventListener('mousemove', (e) => {
+    const now = performance.now();
+    if (now - lastSparkleTime < 55) return;
+    if (lastSparklePos) {
+      const dx = e.clientX - lastSparklePos.x, dy = e.clientY - lastSparklePos.y;
+      if (Math.sqrt(dx*dx + dy*dy) < 14) return;
+    }
+    lastSparkleTime = now;
+    lastSparklePos = { x: e.clientX, y: e.clientY };
+
+    const sparkle = document.createElement('span');
+    sparkle.className = 'sparkle';
+    sparkle.textContent = SPARKLE_GLYPHS[Math.floor(Math.random() * SPARKLE_GLYPHS.length)];
+    sparkle.style.left = (e.clientX - 6 + (Math.random() * 10 - 5)) + 'px';
+    sparkle.style.top = (e.clientY + 20 + (Math.random() * 8 - 4)) + 'px';
+    sparkle.style.fontSize = (9 + Math.random() * 7) + 'px';
+    document.body.appendChild(sparkle);
+    sparkle.addEventListener('animationend', () => sparkle.remove());
+  }, { passive: true });
+
   // ---- Spine chapter nav (active state) ----
   const marks = document.querySelectorAll('.spine-mark');
   const sections = Array.from(marks).map(m => document.getElementById(m.dataset.target)).filter(Boolean);
